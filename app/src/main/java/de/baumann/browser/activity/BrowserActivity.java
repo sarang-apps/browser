@@ -1341,7 +1341,7 @@ public class BrowserActivity extends AppCompatActivity implements BrowserControl
                 int cutoff = height - webViewHeight - 112 * Math.round(getResources().getDisplayMetrics().density);
                 if (scrollY > oldScrollY && cutoff >= scrollY) {
                     if (!searchOnSite)  {
-                        fab_imageButtonNav.setVisibility(View.VISIBLE);
+                        fab_imageButtonNav.setVisibility(View.GONE);
                         searchPanel.setVisibility(View.GONE);
                         omnibox.setVisibility(View.GONE);
                         omniboxTitle.setVisibility(View.GONE);
@@ -1557,7 +1557,7 @@ public class BrowserActivity extends AppCompatActivity implements BrowserControl
             searchPanel.setVisibility(View.GONE);
             omnibox.setVisibility(View.VISIBLE);
             omniboxTitle.setVisibility(View.VISIBLE);
-            appBar.setVisibility(View.VISIBLE);
+            appBar.setVisibility(View.GONE);
         }
     }
 
@@ -1789,7 +1789,7 @@ public class BrowserActivity extends AppCompatActivity implements BrowserControl
                 omnibox.setVisibility(View.GONE);
                 searchPanel.setVisibility(View.VISIBLE);
                 omniboxTitle.setVisibility(View.GONE);
-                appBar.setVisibility(View.VISIBLE);
+                appBar.setVisibility(View.GONE);
             } else if (position == 1) {
                 dialog_overview.cancel();
                 startActivity(new Intent(DownloadManager.ACTION_VIEW_DOWNLOADS));
@@ -1849,7 +1849,7 @@ public class BrowserActivity extends AppCompatActivity implements BrowserControl
             floatButton_tabView.setVisibility(View.GONE);
             floatButton_shareView.setVisibility(View.GONE);
             floatButton_saveView.setVisibility(View.GONE);
-            floatButton_moreView.setVisibility(View.VISIBLE);
+            floatButton_moreView.setVisibility(View.GONE);
         });
 
         dialog_overview.setContentView(view);
