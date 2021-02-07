@@ -11,7 +11,8 @@ android {
     }
 
     defaultConfig {
-        applicationId "de.baumann.browser"
+        applicationId "org.baps.sarangpur.librarykiosk"
+        flavorDimensions "versionCode"
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 105
@@ -20,10 +21,29 @@ android {
         vectorDrawables.useSupportLibrary = true
     }
 
+    productFlavors {
+        library {
+            applicationIdSuffix ".libraryapp"
+            resValue 'string', 'app_name', "Library App"
+        }
+        media {
+            applicationIdSuffix ".mediaapp"
+            resValue 'string', 'app_name', "Media App"
+        }
+    }
+
     buildTypes {
         release {
+            minifyEnabled true
+            debuggable false
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            debuggable true
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 
