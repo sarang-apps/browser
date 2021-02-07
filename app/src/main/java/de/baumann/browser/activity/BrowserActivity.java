@@ -9,6 +9,7 @@ import android.content.BroadcastReceiver;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -19,6 +20,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.PreferenceManager;
 
@@ -56,6 +58,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import java.util.LinkedList;
@@ -418,7 +421,11 @@ public class BrowserActivity extends AppCompatActivity implements BrowserControl
 
         String action = intent.getAction();
         String url = intent.getStringExtra(Intent.EXTRA_TEXT);
-        String favoriteURL = sp.getString("favoriteURL", "https://github.com/scoute-dich/browser");
+        String favoriteURL = sp.getString("favoriteURL", "");
+        if (favoriteURL == null || favoriteURL.isEmpty()) {
+            askForURL();
+            //return;
+        }
 
         if ("".equals(action)) {
             Log.i(TAG, "resumed FOSS browser");
@@ -458,6 +465,35 @@ public class BrowserActivity extends AppCompatActivity implements BrowserControl
             getIntent().setAction("");
             NinjaToast.show(context, getString(R.string.toast_load_error));
         }
+    }
+
+    private void askForURL() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("Enter URL");
+        alert.setMessage("Please enter valid URL to open in the App :");
+
+        // Set an EditText view to get user input
+        final EditText input = new EditText(this);
+        alert.setView(input);
+
+        alert.setPositiveButton("Save URL", (dialog, whichButton) -> {
+            String value = input.getText().toString();
+            if (HelperUnit.isValidURL(value)) {
+                HelperUnit.setFavorite(BrowserActivity.this, value);
+                dialog.dismiss();
+                Toast.makeText(BrowserActivity.this, "URL saved. Please restart the app to take effect...", Toast.LENGTH_LONG).show();
+                finish();
+            } else
+                Toast.makeText(BrowserActivity.this, "Please enter valid URL.", Toast.LENGTH_LONG).show();
+
+            Log.d("", "Pin Value : " + value);
+        });
+
+        alert.setNegativeButton("Cancel",
+                (dialog, which) -> {
+                    dialog.dismiss();
+                });
+        alert.show();
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -1517,6 +1553,10 @@ public class BrowserActivity extends AppCompatActivity implements BrowserControl
 
     @Override
     public void onLongPress(final String url) {
+        // disabling long click on URLs, so that no menu options will be displayed
+        if (true) {
+            return;
+        }
         WebView.HitTestResult result = ninjaWebView.getHitTestResult();
         if (url != null) {
             show_contextMenu_link(url);

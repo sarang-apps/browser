@@ -58,6 +58,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.File;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -245,6 +246,17 @@ public class HelperUnit {
         sp = PreferenceManager.getDefaultSharedPreferences(context);
         sp.edit().putString("favoriteURL", url).apply();
         NinjaToast.show(context, R.string.toast_fav);
+    }
+
+    public static boolean isValidURL(String url) {
+        /* Try creating a valid URL */
+        try {
+            new URL(url).toURI();
+            return true;
+        }
+        catch (Exception e) {
+            return false;
+        }
     }
 
     public static void setBottomSheetBehavior (final BottomSheetDialog dialog, final View view, int beh) {
